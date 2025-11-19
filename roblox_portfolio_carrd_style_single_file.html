@@ -1,0 +1,164 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>dev_master — Roblox Portfolio</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    html {scroll-behavior: smooth;}
+    body {margin:0; padding:0; overflow-x:hidden; font-family:sans-serif; background:#1E40AF; color:#fff;}
+    .glass {background: rgba(255,255,255,0.05); backdrop-filter: blur(6px); border-radius: 1rem; padding: 1rem;}
+    .button {padding:0.5rem 1.2rem; border-radius:9999px; font-weight:600; cursor:pointer;}
+    #work button, #work #extraButtons button {margin:0.3rem;}
+    #particles-canvas {position:fixed; top:0; left:0; width:100%; height:100%; z-index:-1;}
+    .gallery-container {display:flex; flex-wrap:wrap; justify-content:center; gap:1rem; margin-top:1rem;}
+    .gallery-item {width:280px; height:180px; object-fit:cover; border-radius:1rem; cursor:pointer;}
+  </style>
+</head>
+<body>
+  <canvas id="particles-canvas"></canvas>
+
+  <main class="max-w-4xl mx-auto p-6">
+    <header class="mt-12 text-center">
+      <div class="inline-block p-1 rounded-full glass">
+        <img id="avatar" src="https://media.discordapp.net/attachments/1440205132754321468/1440279995808350260/image.png?ex=691d94c6&is=691c4346&hm=53561f811649f2d6f5752f9d1b6ac2b19a1b15e1e638b7a36899da9abdaf248a&=&format=webp&quality=lossless&width=930&height=719" class="w-28 h-28 rounded-full object-cover border-2 border-white/10" />
+      </div>
+      <h1 class="mt-6 text-4xl font-extrabold">dev_master</h1>
+      <p class="mt-2 text-slate-300 max-w-3xl mx-auto">I am a ROBLOX Developer with a wide variety of skills, specialising in Building and Scripting. Explore examples of my skills by clicking the buttons below.</p>
+      <div class="mt-6 flex justify-center gap-3">
+        <a href="#work" class="button bg-white text-slate-900">My Work</a>
+        <a href="#contact" class="button border border-white/10">Contact</a>
+      </div>
+    </header>
+
+    <section id="about" class="mt-14 glass">
+      <h2 class="text-2xl font-bold">About me</h2>
+      <p class="mt-3">
+      As a ROBLOX Developer, I create PVP and Duel games, focusing on immersive experiences. My skillset includes Building and Scripting. I have 3 years experience in Scripting and 3 months in Building. Explore my projects below to see my work in action.
+    </p>
+    </section>
+    </section>
+
+    <section id="work" class="mt-10 text-center">
+      <h2 class="text-2xl font-bold">My Work</h2>
+      <p class="text-slate-400 mt-2">Choose a category to view my creations.</p>
+      <div class="mt-6">
+        <button class="button bg-white text-slate-900" onclick="showGallery('building')">Building</button>
+        <button class="button border border-white/10" onclick="showGallery('scripting')">Scripting (Videos)</button>
+      </div>
+      <div id="gallery" class="gallery-container"></div>
+      <div id="extraButtons" class="mt-10">
+        <button class="button bg-white text-slate-900" onclick="showText('tos')">Terms of Service</button>
+        <button class="button border border-white/10" onclick="showText('faq')">FAQ</button>
+      </div>
+      <div id="textContainer" class="mt-6 glass hidden text-left whitespace-pre-line text-slate-300"></div>
+    </section>
+
+    <section id="contact" class="mt-12 glass">
+      <h2 class="text-2xl font-bold">Contact</h2>
+      <p>Want to hire or collab? DM me on Discord @dev_mastee. I am open to commissions and team projects for Roblox development.</p>
+    </section>
+  </main>
+
+  <script>
+    const canvas = document.getElementById('particles-canvas');
+    const ctx = canvas.getContext('2d');
+    let particles = [];
+
+    function initCanvas() {
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+      particles = [];
+      for(let i=0;i<100;i++) {
+        particles.push({x:Math.random()*canvas.width,y:Math.random()*canvas.height,vx:(Math.random()-0.5)*0.5,vy:(Math.random()-0.5)*0.5,r:Math.random()*2+1});
+      }
+    }
+
+    function animate() {
+      ctx.clearRect(0,0,canvas.width,canvas.height);
+      for(let i=0;i<particles.length;i++){
+        let p1 = particles[i];
+        for(let j=i+1;j<particles.length;j++){
+          let p2 = particles[j];
+          let dx = p1.x-p2.x;
+          let dy = p1.y-p2.y;
+          let dist = Math.sqrt(dx*dx + dy*dy);
+          if(dist<120){
+            ctx.strokeStyle = `rgba(255,255,255,${1-dist/120})`;
+            ctx.lineWidth=1;
+            ctx.beginPath();
+            ctx.moveTo(p1.x,p1.y);
+            ctx.lineTo(p2.x,p2.y);
+            ctx.stroke();
+          }
+        }
+      }
+      particles.forEach(p=>{
+        ctx.beginPath();
+        ctx.arc(p.x,p.y,p.r,0,Math.PI*2);
+        ctx.fillStyle='rgba(255,255,255,0.6)';
+        ctx.fill();
+        p.x += p.vx; p.y += p.vy;
+        if(p.x>canvas.width)p.x=0;if(p.x<0)p.x=canvas.width;
+        if(p.y>canvas.height)p.y=0;if(p.y<0)p.y=canvas.height;
+      });
+      requestAnimationFrame(animate);
+    }
+
+    window.addEventListener('resize',initCanvas);
+    initCanvas();
+    animate();
+
+    const galleryData = {
+      building: [
+        'https://media.discordapp.net/attachments/1440205132754321468/1440260642085797939/image.png?ex=691d82bf&is=691c313f&hm=ea59cdf357a4e0c0bba04d7f21263779af98d4f575e05a0baf629b4860be94a0&=&format=webp&quality=lossless&width=959&height=793',
+        'https://media.discordapp.net/attachments/1440205132754321468/1440263231498358899/image.png?ex=691d8529&is=691c33a9&hm=c564252f78c15e320fb42c71e77aa7df9117a6872570402d9e36c98389293b00&=&format=webp&quality=lossless&width=915&height=623',
+        'https://media.discordapp.net/attachments/1440205132754321468/1440268852922548325/image.png?ex=691d8a65&is=691c38e5&hm=8eb3ccbea548daa2d212d11f6753fcce616af672aa4952734eecd2d0fbbf53d8&=&format=webp&quality=lossless&width=789&height=751',
+        'https://media.discordapp.net/attachments/1440205132754321468/1440271034757419041/image.png?ex=691d8c6d&is=691c3aed&hm=9c5c58a626534b938fe5a21c53ef720e489b52d234738e45d1bac53e8fb3cbe1&=&format=webp&quality=lossless&width=924&height=531'
+      ],
+      scripting: [
+        'https://www.youtube.com/embed/VIDEO_ID_1',
+        'https://www.youtube.com/embed/VIDEO_ID_2',
+        'https://www.youtube.com/embed/VIDEO_ID_3',
+        'https://www.youtube.com/embed/VIDEO_ID_4'
+      ]
+    };
+
+    function showGallery(type){
+      const box = document.getElementById('gallery');
+      box.innerHTML='';
+      galleryData[type].forEach(src=>{
+        if(type==='scripting'){
+          const iframe = document.createElement('iframe');
+          iframe.src = src;
+          iframe.width = '280';
+          iframe.height = '180';
+          iframe.allow = 'accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture';
+          iframe.allowFullscreen = true;
+          iframe.className = 'gallery-item glass';
+          box.appendChild(iframe);
+        } else {
+          const img = document.createElement('img');
+          img.src = src;
+          img.className = 'gallery-item glass';
+          box.appendChild(img);
+        }
+      });
+    }
+
+    const textData = {
+      tos: 'NO REFUNDS, what you purchase will be the final product; if you change your mind after the product is delivered and paid for, it is no longer my issue.\n\nNO LATE PAYMENT, you must either pay upfront or after I\'ve shown you some progress before I send the files. This is to prevent scamming.\n\nPRICES ARE SET BY ME, I set the price that I think is appropriate for the task you are setting me. You may offer a base price and negotiate something, but once I\'ve decided and begun working on it, not changing.\n\nDO NOT OFFER EXPOSURE PAYMENT.\n\nDO NOT RESELL/REDISTRIBUTE.\n\nPAY IN DEVEX RATES, 5 dollars = 1429 ROBUX.\n\nI AM ONLY OPEN FOR COMMISSIONS AND ONE-TIME PAYMENTS.\n\nI WILL NOT WORK ON HUGE PROJECTS ALONE.',
+      faq: 'Q: Can I get a free commission?\nA: no\n\nQ: What payment methods do you accept?\nA: Roblox gift cards, Robux (group funds), Discord Nitro\n\nQ: Why are your rates so expensive?\nA: They are not. Based on DEVEX rates.'
+    };
+
+    function showText(type){
+      const box = document.getElementById('textContainer');
+      box.textContent = textData[type];
+      box.classList.remove('hidden');
+    }
+
+    window.customize = function(opts){if(opts.avatar)document.getElementById('avatar').src=opts.avatar;}
+  </script>
+</body>
+</html>
